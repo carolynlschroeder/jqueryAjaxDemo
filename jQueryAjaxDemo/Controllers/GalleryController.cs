@@ -66,6 +66,19 @@ namespace jQueryAjaxDemo.Controllers
             _context.SaveChanges();
         }
 
+        public JsonResult AddLike(string userId, Guid imageId)
+        {
+            var userLike = new UserLike
+            {
+                Id = userId,
+                ImageId = imageId
+            };
+            _context.UserLikes.Add(userLike);
+            _context.SaveChanges();
+
+            return Json(new { Message = string.Empty }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 
 }

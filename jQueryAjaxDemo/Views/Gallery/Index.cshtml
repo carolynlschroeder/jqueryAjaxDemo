@@ -28,4 +28,33 @@
         }
     </div>
 }
+<input type="hidden" id="userId" value="@User.Identity.GetUserId()" />
 
+
+
+@section scripts{
+    <script>
+        $(function () {
+            $(".like").click(function () {
+                var imageId = $(this).siblings("input.imageId:hidden").val();
+                $.ajax({
+                    dataType: "json",
+                    data: {
+                       userid: $("#userId").val(),
+                       imageid: imageId
+                    },
+                    url: "/Gallery/AddLike",
+                    async: false,
+                    cache: false,
+                    success: function (data) {
+                        window.location.href = "/Gallery/Index";
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Sorry, there has been an error");
+                    }
+
+                });
+            });
+        });
+    </script>
+}
