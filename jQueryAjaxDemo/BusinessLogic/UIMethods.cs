@@ -18,11 +18,5 @@ namespace jQueryAjaxDemo.BusinessLogic
 
         }
 
-        public static int TotalLikes(Guid imageId)
-        {
-            var _context = new jQueryAjaxDemoEntities();
-            var image = _context.Images.FirstOrDefault(i => i.ImageId == imageId);
-            return image.UserLikes.Count();
-        }
     }
 }
