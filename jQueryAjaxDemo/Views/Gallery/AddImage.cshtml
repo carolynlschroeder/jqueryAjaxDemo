@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "Add Image";
+}
+
+<h2>Add Image</h2>
+
+<div id="dropzone" class="dropzone">
+    <div class="dz-message">
+        <span>Drop files here to upload</span>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function() {
+            var mydropZone = new Dropzone("div#dropzone",
+                {
+                    url: "/Gallery/SaveFiles",
+                    maxFiles: 1
+                });
+            mydropZone.on("complete",
+                function (file) {
+                    window.location.href = "/Gallery/Index";
+                });
+        });
+    </script>
+}
