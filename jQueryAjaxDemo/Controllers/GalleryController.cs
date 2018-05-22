@@ -70,6 +70,7 @@ namespace jQueryAjaxDemo.Controllers
         {
             var userLike = new UserLike
             {
+                UserLikesId = Guid.NewGuid(),
                 Id = userId,
                 ImageId = imageId
             };

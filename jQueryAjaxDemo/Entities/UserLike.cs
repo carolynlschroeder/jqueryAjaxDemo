@@ -14,6 +14,7 @@ namespace jQueryAjaxDemo.Entities
     
     public partial class UserLike
     {
+        public System.Guid UserLikesId { get; set; }
         public string Id { get; set; }
         public System.Guid ImageId { get; set; }
     

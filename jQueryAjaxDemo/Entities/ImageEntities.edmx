@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="jQueryAjaxDemoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="jQueryAjaxDemoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Image">
           <Key>
             <PropertyRef Name="ImageId" />
@@ -14,8 +14,9 @@
         </EntityType>
         <EntityType Name="UserLikes">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="UserLikesId" />
           </Key>
+          <Property Name="UserLikesId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="ImageId" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
@@ -39,7 +40,8 @@
             <End Role="UserLikes" EntitySet="UserLikes" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="jQueryAjaxDemoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -48,37 +50,38 @@
             <PropertyRef Name="ImageId" />
           </Key>
           <Property Name="ImageId" Type="Guid" Nullable="false" />
-          <NavigationProperty Name="UserLikes" Relationship="jQueryAjaxDemoModel.FK_UserLikes_Image" FromRole="Image" ToRole="UserLike" />
-          <Property Name="ImageName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ImageName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="UserLikes" Relationship="Self.FK_UserLikes_Image" FromRole="Image" ToRole="UserLikes" />
         </EntityType>
         <EntityType Name="UserLike">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="UserLikesId" />
           </Key>
+          <Property Name="UserLikesId" Type="Guid" Nullable="false" />
           <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ImageId" Type="Guid" Nullable="false" />
-          <NavigationProperty Name="Image" Relationship="jQueryAjaxDemoModel.FK_UserLikes_Image" FromRole="UserLike" ToRole="Image" />
+          <NavigationProperty Name="Image" Relationship="Self.FK_UserLikes_Image" FromRole="UserLikes" ToRole="Image" />
         </EntityType>
-        <EntityContainer Name="jQueryAjaxDemoEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Images" EntityType="Self.Image" />
-          <EntitySet Name="UserLikes" EntityType="Self.UserLike" />
-          <AssociationSet Name="FK_UserLikes_Image" Association="jQueryAjaxDemoModel.FK_UserLikes_Image">
-            <End Role="Image" EntitySet="Images" />
-            <End Role="UserLike" EntitySet="UserLikes" />
-          </AssociationSet>
-        </EntityContainer>
         <Association Name="FK_UserLikes_Image">
-          <End Type="jQueryAjaxDemoModel.Image" Role="Image" Multiplicity="1" />
-          <End Type="jQueryAjaxDemoModel.UserLike" Role="UserLike" Multiplicity="*" />
+          <End Role="Image" Type="Self.Image" Multiplicity="1" />
+          <End Role="UserLikes" Type="Self.UserLike" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Image">
               <PropertyRef Name="ImageId" />
             </Principal>
-            <Dependent Role="UserLike">
+            <Dependent Role="UserLikes">
               <PropertyRef Name="ImageId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityContainer Name="jQueryAjaxDemoEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Images" EntityType="Self.Image" />
+          <EntitySet Name="UserLikes" EntityType="Self.UserLike" />
+          <AssociationSet Name="FK_UserLikes_Image" Association="Self.FK_UserLikes_Image">
+            <End Role="Image" EntitySet="Images" />
+            <End Role="UserLikes" EntitySet="UserLikes" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -88,14 +91,15 @@
           <EntitySetMapping Name="Images">
             <EntityTypeMapping TypeName="jQueryAjaxDemoModel.Image">
               <MappingFragment StoreEntitySet="Image">
-                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
                 <ScalarProperty Name="ImageId" ColumnName="ImageId" />
+                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="UserLikes">
             <EntityTypeMapping TypeName="jQueryAjaxDemoModel.UserLike">
               <MappingFragment StoreEntitySet="UserLikes">
+                <ScalarProperty Name="UserLikesId" ColumnName="UserLikesId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ImageId" ColumnName="ImageId" />
               </MappingFragment>
